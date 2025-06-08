@@ -479,6 +479,7 @@ blocking_style =
   "block",
   "parry",
   "red parry",
+  "random",
 }
 
 blocking_mode =
@@ -1231,7 +1232,17 @@ function update_blocking(_input, _player, _dummy, _mode, _style, _red_parry_hit_
       _animation_frame_delta = _dummy.blocking.expected_attack_animation_hit_frame - _player_relevant_animation_frame
     end
 
-    if _blocking_style == 1 then
+    local _current_block = _blocking_style
+    if _blocking_style == 4 then
+      local _r = math.random()
+      if _r > 0.5 then
+        _current_block = 1
+      else
+        _current_block = 2
+      end
+    end    
+
+    if _current_block == 1 then
       local _blocking_delta_threshold = 2
       if _dummy.blocking.is_precise_timing then
         _blocking_delta_threshold = 1
@@ -1256,7 +1267,7 @@ function update_blocking(_input, _player, _dummy, _mode, _style, _red_parry_hit_
           _input[_dummy.prefix..' Down'] = false
         end
       end
-    elseif _blocking_style == 2 then
+    elseif _current_block == 2 then
       _input[_dummy.prefix..' Right'] = false
       _input[_dummy.prefix..' Left'] = false
       _input[_dummy.prefix..' Down'] = false
